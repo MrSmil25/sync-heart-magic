@@ -265,12 +265,17 @@ function DashboardPage() {
           </div>
         </div>
         <div className="dashboard-team-photo" aria-label="Foto tim My Room">
-          <img
-            src={teamPhoto.url}
-            alt="Tim My Room mengenakan jaket kuning berfoto bersama"
-            width="1024"
-            height="768"
-          />
+          {!teamPhotoFailed && (
+            <img
+              src={teamPhoto.url}
+              alt="Tim My Room mengenakan jaket kuning berfoto bersama"
+              width="1024"
+              height="768"
+              data-loaded={teamPhotoLoaded}
+              onLoad={() => setTeamPhotoLoaded(true)}
+              onError={() => setTeamPhotoFailed(true)}
+            />
+          )}
         </div>
       </section>
 
