@@ -402,21 +402,7 @@ function DashboardPage() {
 
       <QuickActionsGrid pendingLabel={pendingAssignmentLabel} />
 
-      <AttentionCenter items={attentionItems}>
-        {proposalsAboutMe.map((proposal) => (
-          <Link
-            key={proposal.id}
-            to="/warnings/proposals/$id"
-            params={{ id: proposal.id }}
-            className="dashboard-warning-banner"
-          >
-            Ada usulan peringatan untuk kamu. Kamu berhak menyanggah.
-          </Link>
-        ))}
-        <UrgentBanners />
-        <LetterReviewCard />
-        <PerformanceReminderCard />
-      </AttentionCenter>
+      <AttentionCenter items={attentionItems} />
 
       <ActivityTimeline items={activityItems} />
 
@@ -438,6 +424,19 @@ function DashboardPage() {
       <FinancialSnapshot balance={finance?.balance} monthExpense={finance?.monthExpense} />
 
       <section className="space-y-5 dash-enter" aria-label="Informasi organisasi lainnya">
+        {proposalsAboutMe.map((proposal) => (
+          <Link
+            key={proposal.id}
+            to="/warnings/proposals/$id"
+            params={{ id: proposal.id }}
+            className="dashboard-warning-banner"
+          >
+            Ada usulan peringatan untuk kamu. Kamu berhak menyanggah.
+          </Link>
+        ))}
+        <UrgentBanners />
+        <LetterReviewCard />
+        <PerformanceReminderCard />
         {canSeeWealth && (
           <Link to="/finance-summary" className="dashboard-info-banner group">
             <span className="font-semibold">Total Kekayaan: {wallets ? formatRupiah(wallets.total_saldo) : "…"}</span>

@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 
@@ -10,13 +9,7 @@ export type AttentionItem = {
   tone: "danger" | "warning" | "info" | "success";
 };
 
-export function AttentionCenter({
-  items,
-  children,
-}: {
-  items: AttentionItem[];
-  children?: ReactNode;
-}) {
+export function AttentionCenter({ items }: { items: AttentionItem[] }) {
   return (
     <section className="dashboard-section dash-enter" aria-labelledby="attention-heading">
       <div className="dashboard-section-heading">
@@ -43,8 +36,6 @@ export function AttentionCenter({
             <ArrowRight className="dashboard-row-arrow size-4" aria-hidden="true" />
           </Link>
         ))}
-
-        <div className="dashboard-attention-extras">{children}</div>
 
         {items.length === 0 && (
           <div className="dashboard-attention-safe">

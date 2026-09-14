@@ -1359,14 +1359,6 @@
   background: var(--dash-success);
 }
 
-.dashboard-attention-extras:empty {
-  display: none;
-}
-
-.dashboard-attention-extras:not(:empty) {
-  padding: 1rem;
-}
-
 .dashboard-attention-safe {
   display: flex;
   min-height: 7rem;
