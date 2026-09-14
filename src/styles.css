@@ -1683,6 +1683,29 @@
   .dashboard-strip-link {
     grid-column: auto;
   }
+
+  .dashboard-daily-summary > p {
+    width: auto;
+    margin-right: auto;
+  }
+
+  .dashboard-pulse-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .dashboard-pulse-card,
+  .dashboard-pulse-card:nth-child(odd) {
+    border-right: 1px solid var(--dash-line);
+    border-bottom: 0;
+  }
+
+  .dashboard-pulse-card:last-child {
+    border-right: 0;
+  }
+
+  .dashboard-finance-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 380px) {
@@ -1716,7 +1739,15 @@
 
   .workspace-rail-link:hover svg,
   .dashboard-hero-primary:hover,
-  .dashboard-hero-secondary:hover {
+  .dashboard-hero-secondary:hover,
+  .dashboard-start-link:hover,
+  .dashboard-start-link:hover .dashboard-action-icon,
+  .group:hover .dashboard-row-arrow,
+  .dashboard-pulse-card:hover {
     transform: none;
+  }
+
+  .dashboard-timeline-dot {
+    animation: none;
   }
 }

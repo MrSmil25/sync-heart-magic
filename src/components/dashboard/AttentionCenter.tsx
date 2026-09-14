@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, CheckCircle2, CircleAlert } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 
 export type AttentionItem = {
   id: string;

@@ -24,10 +24,7 @@ export function StatCard({
         </span>
       </div>
 
-      <p className={`mt-3 text-3xl font-semibold break-words ${valueClassName}`}>
-        {value}
-      </p>
-
+      <p className={`mt-3 text-3xl font-semibold break-words ${valueClassName}`}>{value}</p>
     </div>
   );
 }

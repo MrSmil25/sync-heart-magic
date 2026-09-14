@@ -37,38 +37,38 @@ export function ActivityTimeline({ items }: { items: ActivityItem[] }) {
         <div className="dashboard-timeline">
           <p className="dashboard-timeline-day">Hari ini</p>
           <ol>
-          {items.map((item, i) => {
-            const content = (
-              <div className="flex gap-4">
-                <div className="flex flex-col items-center">
-                  <span className="dashboard-timeline-dot" />
-                  {i < items.length - 1 && (
-                    <span className="dashboard-timeline-line" aria-hidden="true" />
-                  )}
+            {items.map((item, i) => {
+              const content = (
+                <div className="flex gap-4">
+                  <div className="flex flex-col items-center">
+                    <span className="dashboard-timeline-dot" />
+                    {i < items.length - 1 && (
+                      <span className="dashboard-timeline-line" aria-hidden="true" />
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1 pb-6">
+                    <p className="font-semibold text-dash-navy">{item.title}</p>
+                    <p className="mt-0.5 text-sm text-dash-muted">{item.meta}</p>
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1 pb-6">
-                  <p className="font-semibold text-dash-navy">{item.title}</p>
-                  <p className="mt-0.5 text-sm text-dash-muted">{item.meta}</p>
-                </div>
-              </div>
-            );
+              );
 
-            return (
-              <li key={item.id}>
-                {item.to ? (
-                  <Link
-                    to={item.to}
-                    {...(item.params ? { params: item.params } : {})}
-                    className="dashboard-timeline-link"
-                  >
-                    {content}
-                  </Link>
-                ) : (
-                  <div className="px-1">{content}</div>
-                )}
-              </li>
-            );
-          })}
+              return (
+                <li key={item.id}>
+                  {item.to ? (
+                    <Link
+                      to={item.to}
+                      {...(item.params ? { params: item.params } : {})}
+                      className="dashboard-timeline-link"
+                    >
+                      {content}
+                    </Link>
+                  ) : (
+                    <div className="px-1">{content}</div>
+                  )}
+                </li>
+              );
+            })}
           </ol>
         </div>
       )}

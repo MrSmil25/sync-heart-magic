@@ -23,12 +23,16 @@ export function FinancialSnapshot({
 
       <div className="dashboard-finance-grid">
         <div>
-          <span className="dashboard-finance-icon"><Landmark className="size-4" /></span>
+          <span className="dashboard-finance-icon">
+            <Landmark className="size-4" />
+          </span>
           <p>Saldo saat ini</p>
           <strong>{balance === undefined ? "…" : formatRupiah(balance)}</strong>
         </div>
         <div>
-          <span className="dashboard-finance-icon"><Receipt className="size-4" /></span>
+          <span className="dashboard-finance-icon">
+            <Receipt className="size-4" />
+          </span>
           <p>Pengeluaran bulan ini</p>
           <strong>{monthExpense === undefined ? "…" : formatRupiah(monthExpense)}</strong>
         </div>

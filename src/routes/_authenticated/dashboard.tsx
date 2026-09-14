@@ -180,10 +180,6 @@ function DashboardPage() {
   const activeDeals = deals.filter(
     (d) => d.stage !== "Deal" && d.stage !== "Rejected" && d.stage !== "Ghosted",
   ).length;
-  const pipelineValue = deals
-    .filter((d) => ["Prospect", "Contacted", "Pitched", "Negotiating"].includes(d.stage))
-    .reduce((s, d) => s + Number(d.value_idr ?? 0), 0);
-
   const totalAnggota = profiles.length;
   const anggotaAktif = profiles.filter((p) => p.status === "Active").length;
   const myDivision = divisions.find((d) => d.code === profile?.division);
