@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Users,
@@ -68,6 +69,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 // StatCard, QuickActionsGrid dan ActivityTimeline: komponen presentasi murni.
 
 function DashboardPage() {
+  const [teamPhotoLoaded, setTeamPhotoLoaded] = useState(false);
+  const [teamPhotoFailed, setTeamPhotoFailed] = useState(false);
   const { data: profile } = useMyProfile();
   const { data: profiles = [], isLoading } = useProfiles();
   const { data: divisions = [] } = useDivisions();
@@ -265,12 +268,17 @@ function DashboardPage() {
           </div>
         </div>
         <div className="dashboard-team-photo" aria-label="Foto tim My Room">
-          <img
-            src={teamPhoto.url}
-            alt="Tim My Room mengenakan jaket kuning berfoto bersama"
-            width="1024"
-            height="768"
-          />
+          {!teamPhotoFailed && (
+            <img
+              src={teamPhoto.url}
+              alt="Tim My Room mengenakan jaket kuning berfoto bersama"
+              width="1024"
+              height="768"
+              data-loaded={teamPhotoLoaded}
+              onLoad={() => setTeamPhotoLoaded(true)}
+              onError={() => setTeamPhotoFailed(true)}
+            />
+          )}
         </div>
       </section>
 
