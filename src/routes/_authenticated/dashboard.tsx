@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Users,
@@ -68,6 +69,8 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 // StatCard, QuickActionsGrid dan ActivityTimeline: komponen presentasi murni.
 
 function DashboardPage() {
+  const [teamPhotoLoaded, setTeamPhotoLoaded] = useState(false);
+  const [teamPhotoFailed, setTeamPhotoFailed] = useState(false);
   const { data: profile } = useMyProfile();
   const { data: profiles = [], isLoading } = useProfiles();
   const { data: divisions = [] } = useDivisions();
