@@ -774,6 +774,9 @@ export function createMyRoom(root: HTMLElement, options: MyRoomOptions): MyRoomH
   }
   measure();
   updateMotion();
+  // The login form should never wait for the optional 3D model. Open it
+  // immediately and let the renderer finish loading in the background.
+  if (options.initialOpen) begin(true);
   void init();
   requestDraw();
   return {
