@@ -38,10 +38,7 @@ import { fetchHelpRequests } from "@/lib/help-requests";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { QuickActionsGrid } from "@/components/dashboard/QuickActionsGrid";
 import { ActivityTimeline, type ActivityItem } from "@/components/dashboard/ActivityTimeline";
-import {
-  AttentionCenter,
-  type AttentionItem,
-} from "@/components/dashboard/AttentionCenter";
+import { AttentionCenter, type AttentionItem } from "@/components/dashboard/AttentionCenter";
 import { FinancialSnapshot } from "@/components/dashboard/FinancialSnapshot";
 import { useMyAssignments, useMySubmissions } from "@/hooks/useAssignments";
 import { fetchUnreadCount } from "@/lib/notifications";
@@ -253,103 +250,125 @@ function DashboardPage() {
   ];
   const attentionItems: AttentionItem[] = [
     ...(pendingAssignments > 0
-      ? [{
-          id: "mentor-tasks",
-          title: `${pendingAssignments} tugas baru dari pembina`,
-          detail: "Buka tugas dan tentukan langkah berikutnya.",
-          to: "/mentor-tasks",
-          tone: "danger" as const,
-        }]
+      ? [
+          {
+            id: "mentor-tasks",
+            title: `${pendingAssignments} tugas baru dari pembina`,
+            detail: "Buka tugas dan tentukan langkah berikutnya.",
+            to: "/mentor-tasks",
+            tone: "danger" as const,
+          },
+        ]
       : []),
     ...(decisionsWaiting > 0
-      ? [{
-          id: "help-decisions",
-          title: `${decisionsWaiting} request bantuan menunggu keputusan`,
-          detail: "Tinjau permintaan dari anggota dan divisi terkait.",
-          to: "/help-requests",
-          tone: "info" as const,
-        }]
+      ? [
+          {
+            id: "help-decisions",
+            title: `${decisionsWaiting} request bantuan menunggu keputusan`,
+            detail: "Tinjau permintaan dari anggota dan divisi terkait.",
+            to: "/help-requests",
+            tone: "info" as const,
+          },
+        ]
       : []),
     ...(unpaidBills > 0
-      ? [{
-          id: "unpaid-bills",
-          title: `${unpaidBills} tagihan kas belum dibayar`,
-          detail: "Selesaikan pembayaran kas yang masih tertunda.",
-          to: "/cash",
-          tone: "warning" as const,
-        }]
+      ? [
+          {
+            id: "unpaid-bills",
+            title: `${unpaidBills} tagihan kas belum dibayar`,
+            detail: "Selesaikan pembayaran kas yang masih tertunda.",
+            to: "/cash",
+            tone: "warning" as const,
+          },
+        ]
       : []),
     ...(unackWarnings > 0
-      ? [{
-          id: "warnings",
-          title: `${unackWarnings} peringatan perlu dibaca`,
-          detail: "Buka dan akui peringatan yang ditujukan kepadamu.",
-          to: "/warnings",
-          tone: "danger" as const,
-        }]
+      ? [
+          {
+            id: "warnings",
+            title: `${unackWarnings} peringatan perlu dibaca`,
+            detail: "Buka dan akui peringatan yang ditujukan kepadamu.",
+            to: "/warnings",
+            tone: "danger" as const,
+          },
+        ]
       : []),
     ...(myPicEvents.length > 0
-      ? [{
-          id: "pic-events",
-          title: `${myPicEvents.length} event aktif menjadi tanggung jawabmu`,
-          detail: "Pastikan persiapan dan kebutuhan event tetap terpantau.",
-          to: "/calendar",
-          tone: "success" as const,
-        }]
+      ? [
+          {
+            id: "pic-events",
+            title: `${myPicEvents.length} event aktif menjadi tanggung jawabmu`,
+            detail: "Pastikan persiapan dan kebutuhan event tetap terpantau.",
+            to: "/calendar",
+            tone: "success" as const,
+          },
+        ]
       : []),
     ...(myPendingCancels > 0
-      ? [{
-          id: "cancel-requests",
-          title: `${myPendingCancels} permintaan batal tugas masih diproses`,
-          detail: "Permintaanmu sedang menunggu keputusan Kadiv.",
-          to: "/workspace",
-          tone: "info" as const,
-        }]
+      ? [
+          {
+            id: "cancel-requests",
+            title: `${myPendingCancels} permintaan batal tugas masih diproses`,
+            detail: "Permintaanmu sedang menunggu keputusan Kadiv.",
+            to: "/workspace",
+            tone: "info" as const,
+          },
+        ]
       : []),
     ...(myPendingHelp > 0
-      ? [{
-          id: "my-help-requests",
-          title: `${myPendingHelp} request bantuanmu masih diproses`,
-          detail: "Permintaan sedang menunggu keputusan divisi tujuan.",
-          to: "/help-requests",
-          tone: "info" as const,
-        }]
+      ? [
+          {
+            id: "my-help-requests",
+            title: `${myPendingHelp} request bantuanmu masih diproses`,
+            detail: "Permintaan sedang menunggu keputusan divisi tujuan.",
+            to: "/help-requests",
+            tone: "info" as const,
+          },
+        ]
       : []),
     ...(pendingClaims.length > 0 && cashManager
-      ? [{
-          id: "pending-claims",
-          title: `${pendingClaims.length} klaim menunggu verifikasi`,
-          detail: "Periksa kelengkapan klaim kas yang masuk.",
-          to: "/cash",
-          tone: "warning" as const,
-        }]
+      ? [
+          {
+            id: "pending-claims",
+            title: `${pendingClaims.length} klaim menunggu verifikasi`,
+            detail: "Periksa kelengkapan klaim kas yang masuk.",
+            to: "/cash",
+            tone: "warning" as const,
+          },
+        ]
       : []),
     ...(unreadCoaching > 0
-      ? [{
-          id: "coaching",
-          title: `${unreadCoaching} catatan bimbingan belum dibaca`,
-          detail: "Buka catatan terbaru dari sesi bimbingan.",
-          to: "/coaching",
-          tone: "info" as const,
-        }]
+      ? [
+          {
+            id: "coaching",
+            title: `${unreadCoaching} catatan bimbingan belum dibaca`,
+            detail: "Buka catatan terbaru dari sesi bimbingan.",
+            to: "/coaching",
+            tone: "info" as const,
+          },
+        ]
       : []),
     ...(myVoteProposals.length > 0
-      ? [{
-          id: "proposal-votes",
-          title: `${myVoteProposals.length} usulan menunggu suaramu`,
-          detail: "Tinjau usulan peringatan yang sedang aktif.",
-          to: "/warnings/proposals",
-          tone: "warning" as const,
-        }]
+      ? [
+          {
+            id: "proposal-votes",
+            title: `${myVoteProposals.length} usulan menunggu suaramu`,
+            detail: "Tinjau usulan peringatan yang sedang aktif.",
+            to: "/warnings/proposals",
+            tone: "warning" as const,
+          },
+        ]
       : []),
     ...(divisionWarningCount > 0 && kadiv
-      ? [{
-          id: "division-warnings",
-          title: `${divisionWarningCount} SP aktif di divisimu`,
-          detail: "Pantau tindak lanjut peringatan anggota divisi.",
-          to: "/warnings",
-          tone: "warning" as const,
-        }]
+      ? [
+          {
+            id: "division-warnings",
+            title: `${divisionWarningCount} SP aktif di divisimu`,
+            detail: "Pantau tindak lanjut peringatan anggota divisi.",
+            to: "/warnings",
+            tone: "warning" as const,
+          },
+        ]
       : []),
   ];
 
@@ -390,13 +409,19 @@ function DashboardPage() {
       <section className="dashboard-daily-summary dash-enter" aria-label="Ringkasan hari ini">
         <p>Ringkasan hari ini</p>
         <span className="dashboard-daily-item">
-          <ClipboardCheck /> {assignmentsLoading ? "Memuat tugas…" : `${pendingAssignments} tugas perlu dilihat`}
+          <ClipboardCheck />{" "}
+          {assignmentsLoading ? "Memuat tugas…" : `${pendingAssignments} tugas perlu dilihat`}
         </span>
         <span className="dashboard-daily-item">
           <CalendarDays /> {todayEvents.length} agenda hari ini
         </span>
         <Link to="/notifications" className="dashboard-daily-item">
-          <Bell /> {unreadLoading ? "Memuat notifikasi…" : unreadError ? "Notifikasi belum termuat" : `${unreadNotifications} notifikasi baru`}
+          <Bell />{" "}
+          {unreadLoading
+            ? "Memuat notifikasi…"
+            : unreadError
+              ? "Notifikasi belum termuat"
+              : `${unreadNotifications} notifikasi baru`}
         </Link>
       </section>
 
@@ -406,7 +431,11 @@ function DashboardPage() {
 
       <ActivityTimeline items={activityItems} />
 
-      <section id="ringkasan-organisasi" className="dashboard-section dash-enter" aria-labelledby="summary-heading">
+      <section
+        id="ringkasan-organisasi"
+        className="dashboard-section dash-enter"
+        aria-labelledby="summary-heading"
+      >
         <div className="dashboard-section-heading">
           <div>
             <p className="dashboard-section-kicker">ORGANIZATION PULSE</p>
@@ -439,38 +468,52 @@ function DashboardPage() {
         <PerformanceReminderCard />
         {canSeeWealth && (
           <Link to="/finance-summary" className="dashboard-info-banner group">
-            <span className="font-semibold">Total Kekayaan: {wallets ? formatRupiah(wallets.total_saldo) : "…"}</span>
-            {wallets && ` · Ops ${formatRupiah(wallets.ops_saldo)} · Kas ${formatRupiah(wallets.kas_saldo)}`}
+            <span className="font-semibold">
+              Total Kekayaan: {wallets ? formatRupiah(wallets.total_saldo) : "…"}
+            </span>
+            {wallets &&
+              ` · Ops ${formatRupiah(wallets.ops_saldo)} · Kas ${formatRupiah(wallets.kas_saldo)}`}
           </Link>
         )}
         {bphOrSupervisor && activeProposals.length > 0 && (
           <Link to="/warnings/proposals" className="dashboard-info-banner">
-            Usulan aktif di organisasi: <span className="font-semibold">{activeProposals.length}</span>
+            Usulan aktif di organisasi:{" "}
+            <span className="font-semibold">{activeProposals.length}</span>
           </Link>
         )}
         {weeklyContributions > 0 && (
           <Link to="/contributions" className="dashboard-success-banner">
-            Minggu ini kamu mendapat {weeklyContributions} apresiasi dari rekan. Terima kasih sudah hadir untuk tim.
+            Minggu ini kamu mendapat {weeklyContributions} apresiasi dari rekan. Terima kasih sudah
+            hadir untuk tim.
           </Link>
         )}
         <StakeholderDashboardCards />
         <MarketingDashboardCards />
         {isSupervisor(profile?.role) && <SupervisorOverview />}
         {(isBPH(profile?.role) || (profile?.role === "Kadiv" && profile?.division === "KRD")) && (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"><ContentBalanceMiniCard /></div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <ContentBalanceMiniCard />
+          </div>
         )}
         {myDivision && (
           <section className="dash-surface p-6">
             <div className="flex items-start gap-4">
-              <span className="dash-icon-bubble shrink-0"><Building2 className="size-4" /></span>
+              <span className="dash-icon-bubble shrink-0">
+                <Building2 className="size-4" />
+              </span>
               <div className="min-w-0">
                 <h2 className="text-lg font-semibold">Divisi {myDivision.name}</h2>
-                <p className="mt-1 text-sm text-dash-muted">{myDivision.description ?? "Belum ada deskripsi divisi."}</p>
+                <p className="mt-1 text-sm text-dash-muted">
+                  {myDivision.description ?? "Belum ada deskripsi divisi."}
+                </p>
               </div>
             </div>
           </section>
         )}
-        <div className="grid gap-4 lg:grid-cols-2"><WelcomeGuideCard /><QuickShortcuts /></div>
+        <div className="grid gap-4 lg:grid-cols-2">
+          <WelcomeGuideCard />
+          <QuickShortcuts />
+        </div>
       </section>
     </div>
   );

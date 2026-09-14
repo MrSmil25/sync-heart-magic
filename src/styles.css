@@ -1014,7 +1014,12 @@
   border: 1px solid var(--dash-line);
   border-radius: 1.75rem;
   color: var(--primary-foreground);
-  background: linear-gradient(140deg, oklch(0.21 0.1 268) 0%, oklch(0.33 0.15 260) 48%, oklch(0.56 0.2 245) 100%);
+  background: linear-gradient(
+    140deg,
+    oklch(0.21 0.1 268) 0%,
+    oklch(0.33 0.15 260) 48%,
+    oklch(0.56 0.2 245) 100%
+  );
   box-shadow:
     0 24px 48px -24px oklch(0.3 0.12 260 / 45%),
     var(--dash-shadow-lg);
@@ -1179,7 +1184,9 @@
 .dashboard-action-icon,
 .dashboard-row-arrow {
   color: var(--dash-muted);
-  transition: transform 200ms var(--dash-ease), color 200ms var(--dash-ease);
+  transition:
+    transform 200ms var(--dash-ease),
+    color 200ms var(--dash-ease);
 }
 
 .dashboard-start-link:hover .dashboard-action-icon {
@@ -1440,7 +1447,9 @@
   min-width: 0;
   padding: 1.25rem;
   border-bottom: 1px solid var(--dash-line);
-  transition: background-color 200ms var(--dash-ease), transform 200ms var(--dash-ease);
+  transition:
+    background-color 200ms var(--dash-ease),
+    transform 200ms var(--dash-ease);
 }
 
 .dashboard-pulse-card:nth-child(odd) {
@@ -1503,8 +1512,14 @@
 }
 
 @keyframes dashboard-dot-in {
-  from { opacity: 0; transform: scale(0.7); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 @media (min-width: 1024px) {
