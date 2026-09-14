@@ -6,8 +6,8 @@ export function FinancialSnapshot({
   balance,
   monthExpense,
 }: {
-  balance?: number;
-  monthExpense?: number;
+  balance: number | undefined;
+  monthExpense: number | undefined;
 }) {
   return (
     <section className="dashboard-finance dash-enter" aria-labelledby="finance-heading">
