@@ -1,5 +1,7 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { MyRoomAuth } from "@/components/MyRoomAuth";
+import { supabase } from "@/lib/supabase-external";
 
 export const Route = createFileRoute("/")({
   ssr: false,
@@ -20,14 +22,23 @@ export const Route = createFileRoute("/")({
     ],
     links: [{ rel: "preload", as: "image", href: "/assets/Logo_aplikasi_MR.png" }],
   }),
-  beforeLoad: async () => {
-    const { supabase } = await import("@/lib/supabase-external");
-    const { data } = await supabase.auth.getUser();
-    if (data.user) throw redirect({ to: "/dashboard", replace: true });
-  },
   component: OpeningPage,
 });
 
 function OpeningPage() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    let active = true;
+
+    void supabase.auth.getUser().then(({ data }) => {
+      if (active && data.user) void navigate({ to: "/dashboard", replace: true });
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [navigate]);
+
   return <MyRoomAuth view="intro" />;
 }
