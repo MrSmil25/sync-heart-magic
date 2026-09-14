@@ -1224,7 +1224,7 @@
 @media (min-width: 1024px) {
   .workspace-shell {
     display: grid;
-    grid-template-columns: 6.6rem minmax(0, 1fr);
+    grid-template-columns: 6.5rem minmax(0, 1fr);
   }
 
   .workspace-content {
@@ -1245,23 +1245,29 @@
     top: 1rem;
     z-index: 30;
     display: flex;
-    width: 4.75rem;
+    width: 4.5rem;
     height: calc(100dvh - 2rem);
     align-self: start;
     flex-direction: column;
+    gap: 0.625rem;
     margin: 1rem;
     overflow: visible;
     border: 1px solid var(--dash-line);
-    border-radius: 1.65rem;
-    padding: 0.55rem;
+    border-radius: 1.5rem;
+    padding: 0.5rem;
     background: var(--dash-surface-solid);
     box-shadow: var(--dash-shadow);
     backdrop-filter: blur(18px);
   }
 
   .workspace-rail-scroll {
+    display: flex;
+    width: 100%;
     min-height: 0;
     flex: 1;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.625rem;
     overflow-y: auto;
     scrollbar-width: none;
   }
@@ -1273,11 +1279,11 @@
   .workspace-rail-link {
     position: relative;
     display: grid;
-    width: 3.55rem;
-    height: 3.55rem;
+    width: 2.75rem;
+    height: 2.75rem;
     flex: none;
     place-items: center;
-    border-radius: 1rem;
+    border-radius: 0.9rem;
     color: var(--dash-muted);
     transition:
       transform 200ms var(--dash-ease),
@@ -1286,12 +1292,23 @@
       box-shadow 200ms var(--dash-ease);
   }
 
+  .workspace-rail-link svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    transition: transform 200ms var(--dash-ease);
+  }
+
   .workspace-rail-link:hover,
-  .workspace-rail-link:focus-visible,
+  .workspace-rail-link:focus-visible {
+    color: var(--dash-blue);
+    background: color-mix(in oklab, var(--dash-blue) 8%, transparent);
+  }
+
   .workspace-rail-link[data-active="true"] {
     color: var(--dash-blue);
-    background: var(--dash-blue-soft);
-    box-shadow: 0 8px 18px -14px var(--dash-navy);
+    background: color-mix(in oklab, var(--dash-blue) 12%, transparent);
+    box-shadow: 0 8px 20px color-mix(in oklab, var(--dash-blue) 12%, transparent);
+    transform: scale(1.03);
   }
 
   .workspace-rail-link:hover svg {
@@ -1300,8 +1317,8 @@
 
   .workspace-rail-badge {
     position: absolute;
-    top: 0.2rem;
-    right: 0.15rem;
+    top: -0.1rem;
+    right: -0.05rem;
     display: grid;
     min-width: 1.15rem;
     height: 1.15rem;
