@@ -1014,8 +1014,21 @@
   border: 1px solid var(--dash-line);
   border-radius: 1.75rem;
   color: var(--primary-foreground);
-  background: linear-gradient(145deg, oklch(0.28 0.15 260), oklch(0.58 0.2 240));
-  box-shadow: var(--dash-shadow-lg);
+  background: linear-gradient(140deg, oklch(0.21 0.1 268) 0%, oklch(0.33 0.15 260) 48%, oklch(0.56 0.2 245) 100%);
+  box-shadow:
+    0 24px 48px -24px oklch(0.3 0.12 260 / 45%),
+    var(--dash-shadow-lg);
+}
+
+.dashboard-panorama-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 80% at 88% 8%, oklch(0.75 0.16 235 / 32%) 0%, transparent 62%),
+    radial-gradient(45% 60% at 6% 96%, oklch(0.45 0.16 262 / 28%) 0%, transparent 65%);
 }
 
 .dashboard-hero-copy {
@@ -1079,7 +1092,10 @@
 }
 
 .dashboard-hero-secondary {
+  border: 1px solid oklch(1 0 0 / 22%);
   color: var(--primary-foreground);
+  background: oklch(1 0 0 / 8%);
+  backdrop-filter: blur(10px);
 }
 
 .dashboard-hero-primary:hover,
@@ -1113,6 +1129,19 @@
   height: 100%;
   object-fit: cover;
   object-position: center 42%;
+  opacity: 0;
+  filter: blur(10px);
+  transform: scale(1.02);
+  transition:
+    opacity 600ms var(--dash-ease),
+    filter 600ms var(--dash-ease),
+    transform 600ms var(--dash-ease);
+}
+
+.dashboard-team-photo img[data-loaded="true"] {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
 }
 
 .dashboard-start h2 {
