@@ -1346,8 +1346,8 @@
     padding: 3.25rem 2.8rem;
     background: linear-gradient(
       to right,
-      oklch(0.24 0.13 260) 25%,
-      oklch(0.24 0.13 260 / 92%) 72%,
+      oklch(0.21 0.1 268) 25%,
+      oklch(0.21 0.1 268 / 92%) 72%,
       transparent
     );
   }
@@ -1361,7 +1361,7 @@
   }
 
   .dashboard-team-photo::after {
-    background: linear-gradient(to right, oklch(0.24 0.13 260) 0%, transparent 28%);
+    background: linear-gradient(to right, oklch(0.21 0.1 268) 0%, transparent 28%);
   }
 
   .dashboard-team-photo img {
