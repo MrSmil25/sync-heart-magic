@@ -14,6 +14,7 @@ import {
   CalendarDays,
   ArrowRight,
   Bell,
+  ClipboardCheck,
 } from "lucide-react";
 import { useDivisions, useMyProfile, useProfiles, isSupervisor } from "@/hooks/useProfile";
 import { fetchDeals } from "@/lib/deals";
@@ -41,6 +42,11 @@ import { fetchHelpRequests } from "@/lib/help-requests";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { QuickActionsGrid } from "@/components/dashboard/QuickActionsGrid";
 import { ActivityTimeline, type ActivityItem } from "@/components/dashboard/ActivityTimeline";
+import {
+  AttentionCenter,
+  type AttentionItem,
+} from "@/components/dashboard/AttentionCenter";
+import { FinancialSnapshot } from "@/components/dashboard/FinancialSnapshot";
 import { useMyAssignments, useMySubmissions } from "@/hooks/useAssignments";
 import { fetchUnreadCount } from "@/lib/notifications";
 import { fetchOrgSettings } from "@/lib/announcements";
@@ -220,6 +226,12 @@ function DashboardPage() {
     month: "long",
     year: "numeric",
   }).format(new Date());
+  const todayKey = new Date().toLocaleDateString("en-CA");
+  const todayEvents = events.filter((event) => {
+    const start = event.date_start?.slice(0, 10);
+    const end = event.date_end?.slice(0, 10) ?? start;
+    return !!start && start <= todayKey && !!end && end >= todayKey;
+  });
 
   // Timeline dibangun dari data yang sudah dimuat di atas — tanpa query baru.
   const activityItems: ActivityItem[] = [
@@ -246,6 +258,53 @@ function DashboardPage() {
           params: { id: e.id },
         }) satisfies ActivityItem,
     ),
+  ];
+  const attentionItems: AttentionItem[] = [
+    ...(pendingAssignments > 0
+      ? [{
+          id: "mentor-tasks",
+          title: `${pendingAssignments} tugas baru dari pembina`,
+          detail: "Buka tugas dan tentukan langkah berikutnya.",
+          to: "/mentor-tasks",
+          tone: "danger" as const,
+        }]
+      : []),
+    ...(decisionsWaiting > 0
+      ? [{
+          id: "help-decisions",
+          title: `${decisionsWaiting} request bantuan menunggu keputusan`,
+          detail: "Tinjau permintaan dari anggota dan divisi terkait.",
+          to: "/help-requests",
+          tone: "info" as const,
+        }]
+      : []),
+    ...(unpaidBills > 0
+      ? [{
+          id: "unpaid-bills",
+          title: `${unpaidBills} tagihan kas belum dibayar`,
+          detail: "Selesaikan pembayaran kas yang masih tertunda.",
+          to: "/cash",
+          tone: "warning" as const,
+        }]
+      : []),
+    ...(unackWarnings > 0
+      ? [{
+          id: "warnings",
+          title: `${unackWarnings} peringatan perlu dibaca`,
+          detail: "Buka dan akui peringatan yang ditujukan kepadamu.",
+          to: "/warnings",
+          tone: "danger" as const,
+        }]
+      : []),
+    ...(myPicEvents.length > 0
+      ? [{
+          id: "pic-events",
+          title: `${myPicEvents.length} event aktif menjadi tanggung jawabmu`,
+          detail: "Pastikan persiapan dan kebutuhan event tetap terpantau.",
+          to: "/calendar",
+          tone: "success" as const,
+        }]
+      : []),
   ];
 
   return (
