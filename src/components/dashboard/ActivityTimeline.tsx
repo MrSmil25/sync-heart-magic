@@ -15,32 +15,39 @@ export type ActivityItem = {
  */
 export function ActivityTimeline({ items }: { items: ActivityItem[] }) {
   return (
-    <section className="dash-surface p-6">
-      <h2 className="text-lg font-semibold tracking-tight">Aktivitas Terbaru</h2>
+    <section className="dashboard-section dash-enter" aria-labelledby="activity-heading">
+      <div className="dashboard-section-heading">
+        <div>
+          <p className="dashboard-section-kicker">TERBARU</p>
+          <h2 id="activity-heading">Aktivitas Organisasi</h2>
+        </div>
+      </div>
 
       {items.length === 0 ? (
-        <div className="mt-5 flex flex-col items-center justify-center rounded-2xl border border-dashed border-dash-line px-6 py-10 text-center">
+        <div className="dashboard-activity-empty">
           <span className="dash-icon-bubble size-12 rounded-2xl">
             <Activity className="size-5" />
           </span>
-          <p className="mt-4 font-medium">Belum ada aktivitas terbaru</p>
+          <p className="mt-4 font-semibold text-dash-navy">Belum ada aktivitas</p>
           <p className="mt-1 text-sm text-dash-muted">
-            Aktivitas organisasi akan muncul di sini.
+            Organisasi akan berkembang seiring aktivitas berjalan.
           </p>
         </div>
       ) : (
-        <ol className="mt-5 space-y-1">
+        <div className="dashboard-timeline">
+          <p className="dashboard-timeline-day">Hari ini</p>
+          <ol>
           {items.map((item, i) => {
             const content = (
               <div className="flex gap-4">
                 <div className="flex flex-col items-center">
-                  <span className="mt-1.5 size-2.5 rounded-full bg-dash-blue" />
+                  <span className="dashboard-timeline-dot" />
                   {i < items.length - 1 && (
-                    <span className="mt-1 w-px flex-1 bg-dash-line" aria-hidden="true" />
+                    <span className="dashboard-timeline-line" aria-hidden="true" />
                   )}
                 </div>
-                <div className="min-w-0 flex-1 pb-5">
-                  <p className="truncate font-medium">{item.title}</p>
+                <div className="min-w-0 flex-1 pb-6">
+                  <p className="font-semibold text-dash-navy">{item.title}</p>
                   <p className="mt-0.5 text-sm text-dash-muted">{item.meta}</p>
                 </div>
               </div>
@@ -52,17 +59,18 @@ export function ActivityTimeline({ items }: { items: ActivityItem[] }) {
                   <Link
                     to={item.to}
                     {...(item.params ? { params: item.params } : {})}
-                    className="block rounded-xl px-2 transition-colors hover:bg-dash-blue-soft/50"
+                    className="dashboard-timeline-link"
                   >
                     {content}
                   </Link>
                 ) : (
-                  <div className="px-2">{content}</div>
+                  <div className="px-1">{content}</div>
                 )}
               </li>
             );
           })}
-        </ol>
+          </ol>
+        </div>
       )}
     </section>
   );

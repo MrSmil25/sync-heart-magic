@@ -16,7 +16,7 @@ export function StatCard({
   valueClassName?: string;
 }) {
   return (
-    <div className="dash-card group p-5">
+    <div className="dashboard-pulse-card group">
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm font-medium text-dash-muted">{label}</p>
         <span className="dash-icon-bubble shrink-0 group-hover:-translate-y-0.5">
@@ -24,7 +24,7 @@ export function StatCard({
         </span>
       </div>
 
-      <p className={`mt-4 text-3xl font-semibold tracking-tight break-words ${valueClassName}`}>
+      <p className={`mt-3 text-3xl font-semibold break-words ${valueClassName}`}>
         {value}
       </p>
 
