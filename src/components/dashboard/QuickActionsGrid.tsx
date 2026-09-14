@@ -32,13 +32,13 @@ export function QuickActionsGrid({ pendingLabel }: { pendingLabel: string }) {
         {actions.map((a) => (
           <Link key={a.label} to={a.to} className="dashboard-start-link group">
             <span className="dashboard-start-icon">
-              <a.icon className="size-5" />
+              <a.icon className="dashboard-action-icon size-5" />
             </span>
             <span className="min-w-0 flex-1">
               <span className="block font-semibold text-dash-navy">{a.label}</span>
               <span className="mt-0.5 block text-sm text-dash-muted">{a.description}</span>
             </span>
-            <ArrowRight className="size-4 text-dash-muted transition-transform group-hover:translate-x-0.5" />
+            <ArrowRight className="dashboard-row-arrow size-4" />
           </Link>
         ))}
       </div>

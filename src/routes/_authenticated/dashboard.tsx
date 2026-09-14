@@ -3,17 +3,14 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
   Users,
-  Boxes,
   UserCheck,
   Building2,
   BriefcaseBusiness,
   Handshake,
-  Coins,
-  Landmark,
-  Receipt,
   CalendarDays,
   ArrowRight,
   Bell,
+  ClipboardCheck,
 } from "lucide-react";
 import { useDivisions, useMyProfile, useProfiles, isSupervisor } from "@/hooks/useProfile";
 import { fetchDeals } from "@/lib/deals";
@@ -41,6 +38,8 @@ import { fetchHelpRequests } from "@/lib/help-requests";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { QuickActionsGrid } from "@/components/dashboard/QuickActionsGrid";
 import { ActivityTimeline, type ActivityItem } from "@/components/dashboard/ActivityTimeline";
+import { AttentionCenter, type AttentionItem } from "@/components/dashboard/AttentionCenter";
+import { FinancialSnapshot } from "@/components/dashboard/FinancialSnapshot";
 import { useMyAssignments, useMySubmissions } from "@/hooks/useAssignments";
 import { fetchUnreadCount } from "@/lib/notifications";
 import { fetchOrgSettings } from "@/lib/announcements";
@@ -178,10 +177,6 @@ function DashboardPage() {
   const activeDeals = deals.filter(
     (d) => d.stage !== "Deal" && d.stage !== "Rejected" && d.stage !== "Ghosted",
   ).length;
-  const pipelineValue = deals
-    .filter((d) => ["Prospect", "Contacted", "Pitched", "Negotiating"].includes(d.stage))
-    .reduce((s, d) => s + Number(d.value_idr ?? 0), 0);
-
   const totalAnggota = profiles.length;
   const anggotaAktif = profiles.filter((p) => p.status === "Active").length;
   const myDivision = divisions.find((d) => d.code === profile?.division);
@@ -220,6 +215,12 @@ function DashboardPage() {
     month: "long",
     year: "numeric",
   }).format(new Date());
+  const todayKey = new Date().toLocaleDateString("en-CA");
+  const todayEvents = events.filter((event) => {
+    const start = event.date_start?.slice(0, 10);
+    const end = event.date_end?.slice(0, 10) ?? start;
+    return !!start && start <= todayKey && !!end && end >= todayKey;
+  });
 
   // Timeline dibangun dari data yang sudah dimuat di atas — tanpa query baru.
   const activityItems: ActivityItem[] = [
@@ -246,6 +247,129 @@ function DashboardPage() {
           params: { id: e.id },
         }) satisfies ActivityItem,
     ),
+  ];
+  const attentionItems: AttentionItem[] = [
+    ...(pendingAssignments > 0
+      ? [
+          {
+            id: "mentor-tasks",
+            title: `${pendingAssignments} tugas baru dari pembina`,
+            detail: "Buka tugas dan tentukan langkah berikutnya.",
+            to: "/mentor-tasks",
+            tone: "danger" as const,
+          },
+        ]
+      : []),
+    ...(decisionsWaiting > 0
+      ? [
+          {
+            id: "help-decisions",
+            title: `${decisionsWaiting} request bantuan menunggu keputusan`,
+            detail: "Tinjau permintaan dari anggota dan divisi terkait.",
+            to: "/help-requests",
+            tone: "info" as const,
+          },
+        ]
+      : []),
+    ...(unpaidBills > 0
+      ? [
+          {
+            id: "unpaid-bills",
+            title: `${unpaidBills} tagihan kas belum dibayar`,
+            detail: "Selesaikan pembayaran kas yang masih tertunda.",
+            to: "/cash",
+            tone: "warning" as const,
+          },
+        ]
+      : []),
+    ...(unackWarnings > 0
+      ? [
+          {
+            id: "warnings",
+            title: `${unackWarnings} peringatan perlu dibaca`,
+            detail: "Buka dan akui peringatan yang ditujukan kepadamu.",
+            to: "/warnings",
+            tone: "danger" as const,
+          },
+        ]
+      : []),
+    ...(myPicEvents.length > 0
+      ? [
+          {
+            id: "pic-events",
+            title: `${myPicEvents.length} event aktif menjadi tanggung jawabmu`,
+            detail: "Pastikan persiapan dan kebutuhan event tetap terpantau.",
+            to: "/calendar",
+            tone: "success" as const,
+          },
+        ]
+      : []),
+    ...(myPendingCancels > 0
+      ? [
+          {
+            id: "cancel-requests",
+            title: `${myPendingCancels} permintaan batal tugas masih diproses`,
+            detail: "Permintaanmu sedang menunggu keputusan Kadiv.",
+            to: "/workspace",
+            tone: "info" as const,
+          },
+        ]
+      : []),
+    ...(myPendingHelp > 0
+      ? [
+          {
+            id: "my-help-requests",
+            title: `${myPendingHelp} request bantuanmu masih diproses`,
+            detail: "Permintaan sedang menunggu keputusan divisi tujuan.",
+            to: "/help-requests",
+            tone: "info" as const,
+          },
+        ]
+      : []),
+    ...(pendingClaims.length > 0 && cashManager
+      ? [
+          {
+            id: "pending-claims",
+            title: `${pendingClaims.length} klaim menunggu verifikasi`,
+            detail: "Periksa kelengkapan klaim kas yang masuk.",
+            to: "/cash",
+            tone: "warning" as const,
+          },
+        ]
+      : []),
+    ...(unreadCoaching > 0
+      ? [
+          {
+            id: "coaching",
+            title: `${unreadCoaching} catatan bimbingan belum dibaca`,
+            detail: "Buka catatan terbaru dari sesi bimbingan.",
+            to: "/coaching",
+            tone: "info" as const,
+          },
+        ]
+      : []),
+    ...(myVoteProposals.length > 0
+      ? [
+          {
+            id: "proposal-votes",
+            title: `${myVoteProposals.length} usulan menunggu suaramu`,
+            detail: "Tinjau usulan peringatan yang sedang aktif.",
+            to: "/warnings/proposals",
+            tone: "warning" as const,
+          },
+        ]
+      : []),
+    ...(divisionWarningCount > 0 && kadiv
+      ? [
+          {
+            id: "division-warnings",
+            title: `${divisionWarningCount} SP aktif di divisimu`,
+            detail: "Pantau tindak lanjut peringatan anggota divisi.",
+            to: "/warnings",
+            tone: "warning" as const,
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -282,175 +406,95 @@ function DashboardPage() {
         </div>
       </section>
 
-      <QuickActionsGrid pendingLabel={pendingAssignmentLabel} />
-
-      <section className="dashboard-notification-strip" aria-label="Ringkasan notifikasi">
-        <span className="dashboard-notification-icon">
-          <Bell className="size-5" />
+      <section className="dashboard-daily-summary dash-enter" aria-label="Ringkasan hari ini">
+        <p>Ringkasan hari ini</p>
+        <span className="dashboard-daily-item">
+          <ClipboardCheck />{" "}
+          {assignmentsLoading ? "Memuat tugas…" : `${pendingAssignments} tugas perlu dilihat`}
         </span>
-        <p className="min-w-0 flex-1 font-semibold">
-          {unreadError
-            ? "Notifikasi belum dapat dimuat"
-            : unreadLoading
-              ? "Memuat notifikasi…"
-              : unreadNotifications === 0
-                ? "Semua notifikasi sudah dibaca"
-                : `${unreadNotifications} notifikasi baru`}
-        </p>
-        <Link to="/notifications" className="dashboard-strip-link">
-          Lihat notifikasi <ArrowRight className="size-4" />
+        <span className="dashboard-daily-item">
+          <CalendarDays /> {todayEvents.length} agenda hari ini
+        </span>
+        <Link to="/notifications" className="dashboard-daily-item">
+          <Bell />{" "}
+          {unreadLoading
+            ? "Memuat notifikasi…"
+            : unreadError
+              ? "Notifikasi belum termuat"
+              : `${unreadNotifications} notifikasi baru`}
         </Link>
       </section>
 
-      <div className="flex justify-end">
-        <a href="#ringkasan-organisasi" className="dashboard-summary-link">
-          Ringkasan organisasi <ArrowRight className="size-4" />
-        </a>
-      </div>
+      <QuickActionsGrid pendingLabel={pendingAssignmentLabel} />
+
+      <AttentionCenter items={attentionItems} />
+
+      <ActivityTimeline items={activityItems} />
 
       <section
         id="ringkasan-organisasi"
-        className="scroll-mt-24 space-y-6"
+        className="dashboard-section dash-enter"
         aria-labelledby="summary-heading"
       >
-        <div>
-          <p className="text-sm font-semibold text-dash-blue">RINGKASAN</p>
-          <h2 id="summary-heading" className="mt-1 text-2xl font-semibold text-dash-navy">
-            Ringkasan organisasi
-          </h2>
+        <div className="dashboard-section-heading">
+          <div>
+            <p className="dashboard-section-kicker">ORGANIZATION PULSE</p>
+            <h2 id="summary-heading">Organisasi Hari Ini</h2>
+          </div>
         </div>
-
-        <div className="space-y-4">
-          {unackWarnings > 0 && (
-            <Link
-              to="/warnings"
-              className="block rounded-2xl border-2 border-red-400 bg-red-50 p-5 font-semibold text-red-900 shadow-sm transition-colors hover:bg-red-100"
-            >
-              Kamu punya {unackWarnings} peringatan yang perlu dibaca. Klik untuk membukanya.
-            </Link>
-          )}
-          {proposalsAboutMe.map((p) => (
-            <Link
-              key={p.id}
-              to="/warnings/proposals/$id"
-              params={{ id: p.id }}
-              className="block rounded-2xl border-2 border-amber-400 bg-amber-50 p-5 font-semibold text-amber-900 shadow-sm transition-colors hover:bg-amber-100"
-            >
-              Ada usulan peringatan untuk kamu. Kamu berhak menyanggah.
-            </Link>
-          ))}
-          <UrgentBanners />
-        </div>
-
-        <div className="dash-stagger grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="dashboard-pulse-grid dash-stagger">
           <StatCard label="Total Anggota" value={isLoading ? "…" : totalAnggota} icon={Users} />
-          <StatCard label="Total Divisi" value={divisions.length} icon={Boxes} />
           <StatCard label="Anggota Aktif" value={isLoading ? "…" : anggotaAktif} icon={UserCheck} />
-          <StatCard label="Divisi Saya" value={myDivision?.code ?? "-"} icon={Building2} />
+          <StatCard label="Event Berjalan" value={activeEvents.length} icon={CalendarDays} />
           <StatCard label="Deal Aktif" value={activeDeals} icon={Handshake} />
-          <StatCard label="Total Pipeline Value" value={formatRupiah(pipelineValue)} icon={Coins} />
-          <StatCard
-            label="Saldo Organisasi"
-            value={finance ? formatRupiah(finance.balance) : "…"}
-            icon={Landmark}
-            valueClassName={
-              finance ? (finance.balance >= 0 ? "text-emerald-600" : "text-red-600") : ""
-            }
-          />
-          <StatCard
-            label="Expense Bulan Ini"
-            value={finance ? formatRupiah(finance.monthExpense) : "…"}
-            icon={Receipt}
-            valueClassName="text-red-600"
-          />
-          <StatCard label="Event Aktif" value={activeEvents.length} icon={CalendarDays} />
         </div>
+      </section>
 
-        {canSeeWealth && (
+      <FinancialSnapshot balance={finance?.balance} monthExpense={finance?.monthExpense} />
+
+      <section className="space-y-5 dash-enter" aria-label="Informasi organisasi lainnya">
+        {proposalsAboutMe.map((proposal) => (
           <Link
-            to="/finance-summary"
-            className="block rounded-2xl border bg-card p-5 shadow-sm transition-colors hover:bg-accent/40"
+            key={proposal.id}
+            to="/warnings/proposals/$id"
+            params={{ id: proposal.id }}
+            className="dashboard-warning-banner"
           >
-            <p className="text-sm text-muted-foreground">Total Kekayaan</p>
-            <p className="mt-1 text-3xl font-bold tracking-tight break-words">
-              {wallets ? formatRupiah(wallets.total_saldo) : "…"}
-            </p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {wallets
-                ? `Ops: ${formatRupiah(wallets.ops_saldo)} · Kas: ${formatRupiah(wallets.kas_saldo)}`
-                : "Memuat ringkasan dompet…"}
-            </p>
+            Ada usulan peringatan untuk kamu. Kamu berhak menyanggah.
+          </Link>
+        ))}
+        <UrgentBanners />
+        <LetterReviewCard />
+        <PerformanceReminderCard />
+        {canSeeWealth && (
+          <Link to="/finance-summary" className="dashboard-info-banner group">
+            <span className="font-semibold">
+              Total Kekayaan: {wallets ? formatRupiah(wallets.total_saldo) : "…"}
+            </span>
+            {wallets &&
+              ` · Ops ${formatRupiah(wallets.ops_saldo)} · Kas ${formatRupiah(wallets.kas_saldo)}`}
           </Link>
         )}
-
-        <div className="space-y-4">
-          {myPendingCancels > 0 && (
-            <Link to="/workspace" className="dashboard-info-banner">
-              Permintaan batal task kamu ({myPendingCancels}) masih menunggu keputusan Kadiv.
-            </Link>
-          )}
-          {myPendingHelp > 0 && (
-            <Link to="/help-requests" className="dashboard-info-banner">
-              Request bantuan kamu ({myPendingHelp}) menunggu keputusan Kadiv divisi tujuan.
-            </Link>
-          )}
-          {kadiv && decisionsWaiting > 0 && (
-            <Link to="/help-requests" className="dashboard-warning-banner">
-              {decisionsWaiting} permintaan menunggu keputusanmu.
-            </Link>
-          )}
-          {myVoteProposals.length > 0 && (
-            <Link to="/warnings/proposals" className="dashboard-info-banner">
-              Ada <span className="font-semibold">{myVoteProposals.length}</span> usulan peringatan
-              menunggu suara kamu.
-            </Link>
-          )}
-          {bphOrSupervisor && activeProposals.length > 0 && (
-            <Link to="/warnings/proposals" className="dashboard-info-banner">
-              Usulan aktif di organisasi:{" "}
-              <span className="font-semibold">{activeProposals.length}</span>
-            </Link>
-          )}
-          {kadiv && divisionWarningCount > 0 && (
-            <Link to="/warnings" className="dashboard-info-banner">
-              SP aktif di divisi kamu: <span className="font-semibold">{divisionWarningCount}</span>
-            </Link>
-          )}
-          {unpaidBills > 0 && (
-            <Link to="/cash" className="dashboard-warning-banner">
-              Kamu punya {unpaidBills} tagihan kas belum dibayar. Klik untuk membayar.
-            </Link>
-          )}
-          {cashManager && pendingClaims.length > 0 && (
-            <Link to="/cash" className="dashboard-info-banner">
-              Klaim menunggu verifikasi:{" "}
-              <span className="font-semibold">{pendingClaims.length}</span>
-            </Link>
-          )}
-          {unreadCoaching > 0 && (
-            <Link to="/coaching" className="dashboard-info-banner">
-              Ada {unreadCoaching} catatan bimbingan yang belum kamu baca. Klik untuk membukanya.
-            </Link>
-          )}
-          {weeklyContributions > 0 && (
-            <Link to="/contributions" className="dashboard-success-banner">
-              Minggu ini kamu mendapat {weeklyContributions} apresiasi dari rekan. Terima kasih
-              sudah hadir untuk tim.
-            </Link>
-          )}
-        </div>
-
+        {bphOrSupervisor && activeProposals.length > 0 && (
+          <Link to="/warnings/proposals" className="dashboard-info-banner">
+            Usulan aktif di organisasi:{" "}
+            <span className="font-semibold">{activeProposals.length}</span>
+          </Link>
+        )}
+        {weeklyContributions > 0 && (
+          <Link to="/contributions" className="dashboard-success-banner">
+            Minggu ini kamu mendapat {weeklyContributions} apresiasi dari rekan. Terima kasih sudah
+            hadir untuk tim.
+          </Link>
+        )}
         <StakeholderDashboardCards />
         <MarketingDashboardCards />
-        <PerformanceReminderCard />
-        <LetterReviewCard />
         {isSupervisor(profile?.role) && <SupervisorOverview />}
         {(isBPH(profile?.role) || (profile?.role === "Kadiv" && profile?.division === "KRD")) && (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <ContentBalanceMiniCard />
           </div>
         )}
-        <ActivityTimeline items={activityItems} />
         {myDivision && (
           <section className="dash-surface p-6">
             <div className="flex items-start gap-4">
@@ -458,7 +502,7 @@ function DashboardPage() {
                 <Building2 className="size-4" />
               </span>
               <div className="min-w-0">
-                <h2 className="text-lg font-semibold tracking-tight">Divisi {myDivision.name}</h2>
+                <h2 className="text-lg font-semibold">Divisi {myDivision.name}</h2>
                 <p className="mt-1 text-sm text-dash-muted">
                   {myDivision.description ?? "Belum ada deskripsi divisi."}
                 </p>
